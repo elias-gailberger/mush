@@ -43,12 +43,15 @@ Just keep calm and restart. The player is a buggy piece of crap and will do that
 #### Your support for non-ASCII characters is awful and you need to die.
 I know.
 
-#### This damned thing won't work, and I would like to bestow curses and hate mail upon you!
+#### This damn thing won't work, and I would like to bestow curses and hate mail upon you!
 elias.gailberger@gmail.com
 You might get into my spam folder, but if not, I'll read it and probably respond.
 
 
 ¹If this subset of your music library is non-empty, be sure to send me samples.
+
 ²This is a more realistic use case - the intersection between the "instrumental" and "rhythm" tags is exactly the kind of background music I use for work a lot.
+
 ³I typo this word all the time.
+
 ⁴Obligatory reference: http://xkcd.com/400/
