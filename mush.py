@@ -204,8 +204,6 @@ class TrackdataEntry:
 class Mush:
     def __init__(self,name=None):
         self.version=VERSION
-        self.stddir="%userprofile%/Music"
-        self.pwd=self.stddir
         self.volume=100
         self.muted=0
         self.playthread=Playthread(self)
@@ -237,6 +235,8 @@ class Mush:
         self.body.bind("<ButtonRelease>",self.cmdlinefocus)
         self.readtrackfile()
         self.readaltfile()
+        self.readcfgfile()
+        self.pwd=os.path.expandvars(self.cfgdata["musicfolder"])
         self.playedthissession=[]
         self.tracklist=[]
         self.playlist=[]
@@ -246,27 +246,13 @@ class Mush:
         self.nexttrack=None
         self.choicelist=None
         self.repeat=False
-        self.feedback=False
-        self.startupsound=mp3play.load("sounds/startup.mp3")
-        self.yessound=mp3play.load("sounds/yes.mp3")
-        self.nosound=mp3play.load("sounds/no.mp3")
         self.maketracklist()
         self.makeplaylist()
         self.trackindex=0
         self.restrictedplaylist=False
         self.greet()
-        self.bling()
         self.alive=True
         self.window.mainloop()
-    def bling(self):
-        self.startupsound.volume((self.volume/3 if self.volume>2 else 1))
-        self.startupsound.play()
-    def sound_yes(self):
-        self.yessound.volume((self.volume/2 if self.volume>1 else 1))
-        self.yessound.play()
-    def sound_no(self):
-        self.nosound.volume((self.volume/2 if self.volume>1 else 1))
-        self.nosound.play()
     def readtrackfile(self):
         trackfile=open("tracks.dat")
         backupfile=open("#tracks.dat#","w")
@@ -294,6 +280,7 @@ class Mush:
                 trackfile.write(track+"|")
                 trackfile.write(";".join(self.trackdata[track].tags).encode("latin-1")+"|")
                 trackfile.write(str(self.trackdata[track].prob)+"\n")
+        trackfile.close()
     def readaltfile(self):
         altfile=open("alts.dat")
         self.altdata={}
@@ -302,6 +289,15 @@ class Mush:
         for i in range(len(lines)):
             self.altdata[lines[i]]=lines[i+j]
             j*=-1
+        altfile.close()
+    def readcfgfile(self):
+        cfgfile=open("mush.cfg")
+        self.cfgdata={"musicfolder":"%userprofile%/Music"}
+        for line in cfgfile.readlines():
+            if ":" in line:
+                line=line.split(":")
+                self.cfgdata[line[0].strip()]=line[1].strip()
+        cfgfile.close()
     def never(self,track):
         self.trackdata[track].prob=0
         self.echo(track[len(self.pwd):]+" will not be played again.")
@@ -333,12 +329,8 @@ class Mush:
                     pass
                 elif ret:
                     self.echo(cmd+u" ✔")
-                    if self.feedback:
-                        self.sound_yes()
                 else:
                     self.echo(cmd+u" ✘")
-                    if self.feedback:
-                        self.sound_no()
                 if self.cmdout:
                     self.echo(self.cmdout)
             self.cmdhist.pop(0)
@@ -416,8 +408,6 @@ List of available commands:                                                     
                         currently playing track                                  ✔
    version              Diplays the current version of the player                ✔
    quit      q          Quits the player                                         ✔
-   feedback  fb         Toggles auditive feedback for successful/unsuccessful    ✔
-                        commands                                                 ✔
      """
         self.cmdout=""
         allcaps=False
@@ -485,9 +475,7 @@ List of available commands:                                                     
                     "unicorn":    self.cmd_unicorn,
                     "nowplaying": self.cmd_nowplaying, "np":       self.cmd_nowplaying,
                     "stats":      self.cmd_stats,
-                    "info":       self.cmd_info,
-                    "feedback":   self.cmd_fb,         "fb":       self.cmd_fb,
-                    "bling":      self.cmd_bling}[cmd.lower()](arg)
+                    "info":       self.cmd_info}[cmd.lower()](arg)
         except KeyError:
             self.cmdout="I don't know what "+cmd+" means :("
             return False
@@ -1096,13 +1084,6 @@ List of available commands:                                                     
             self.cmdout+="\nThere are %s tracks in the current playlist which are not yet tagged and rated."%len(self.newtracks)
         else:
             self.cmdout+="\nAll tracks in the current playlist are tagged and/or rated."
-        return True
-    def cmd_bling(self,arg):
-        self.bling()
-        return True
-    def cmd_fb(self,arg):
-        self.feedback^=True
-        self.cmdout="Auditive command feedback turned "+["off","on"][self.feedback]
         return True
     def cmd_allcaps(self,arg):
         self.cmdout="PLEASE DO NOT WRITE IN ALLCAPS, IT IS NOT POLITE"
