@@ -2,6 +2,7 @@ mush
 ====
 
 a python command line music player
+
 by Elias Gailberger - elias.gailberger@gmail.com
 
 #### What does it do?
@@ -19,7 +20,9 @@ When you first start mush, it will assume your music is in %userprofile%/Music (
 Type in `play` and hit Enter.
 
 The player will now most likely fling random pieces of music at you, from all the tracks in all the subfolders it can find from its current folder. *Now here comes the important part:* If you are anything like me (why else would you else use this player) you now want to tag those tracks, so the player knows something about them. The more you tell it, the sweeter things you can pull off later ("Just play vegetarian progressive grindcore from the 17th century"¹ or "Play me instrumental tracks with some rhythm behind them"²). You do this by simply entering for instance `tag instrumental`. You also can easily give multiple tags (`tag beatles;lennon;acidtrip`). If you make typos with your tags, you can either say `untag rhyhtm` or `tag -rhyhtm`³ - a minus sign before a tag removes it.
+
 Also, you might want to tell mush how much you like a certain track, so it can play it more or less often in the future. This is most easily done by simply typing `+` and `-` and hitting enter. You can also be more specific and say something like `+ 10` or `- 50` (all tracks start with a default playing probability of 100, the `+` and `-` commands by default add/subtract 20).
+
 If some track you don't want to hear randomed comes up⁴, you can just veto it by typing `never`. This is handy if you have some music you don't want anyone else to hear, or you just hate a song on your disk for some reason (what are you doing? Just delete it).
 
 #### I have my favourite songs tagged up, what now?
@@ -45,6 +48,7 @@ I know.
 
 #### This damn thing won't work, and I would like to bestow curses and hate mail upon you!
 elias.gailberger@gmail.com
+
 You might get into my spam folder, but if not, I'll read it and probably respond.
 
 
